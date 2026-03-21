@@ -45,11 +45,11 @@ link_file() {
   mkdir -p "$(dirname "$dst")"
 
   if [ -e "$dst" ] && [ ! -L "$dst" ]; then
-    echo "📦 Backing up $dst to ${dst}.bak"
+    echo "[b] Backing up $dst to ${dst}.bak"
     mv "$dst" "${dst}.bak"
   fi
 
-  echo "🔗 Linking $dst -> $src"
+  echo "[c] Linking $dst -> $src"
   ln -sfn "$src" "$dst"
 }
 
@@ -63,6 +63,8 @@ setup_arch() {
 
 setup_termux() {
   echo "Termux setup starting..."
+
+  link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 }
 
 # ------------ MAIN EXECUTION ---------------------
