@@ -43,6 +43,8 @@ link_file() {
   if [ -e "$dst" ] && [ ! -L "$dst" ]; then
     echo "[b] Backing up $dst to ${dst}.bak"
     mv "$dst" "${dst}.bak"
+  elif [ -L "$dst" ]; then
+    rm "$dst"
   fi
 
   echo "[c] Linking $dst -> $src"
@@ -60,7 +62,7 @@ setup_termux() {
 
   pkg update && pkg upgrade -y
   pkg install -y git curl nvim fish tmux termux-api termux-exec \
-    nodejs-lts python
+    nodejs-lts python ripgrep fd fzf clang build-essential python-pip
 
   termux-wake-lock
 
