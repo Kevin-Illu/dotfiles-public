@@ -59,7 +59,8 @@ setup_termux() {
   echo "Termux setup starting..."
 
   pkg update && pkg upgrade -y
-  pkg install -y git curl nvim fish tmux termux-api termux-exec
+  pkg install -y git curl nvim fish tmux termux-api termux-exec \
+    nodejs-lts python
 
   termux-wake-lock
 
