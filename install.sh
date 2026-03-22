@@ -4,9 +4,7 @@ set -e
 
 DOTFILES_DIR=$(pwd)
 
-# ---------------- DETECTING SYSTEM LOGIC -----------
 detect_system() {
-
   # detecting Android with termux
   if [ -d /data/data/com.termux ]; then
     echo "termux"
@@ -34,9 +32,6 @@ declare -A SYSTEM_SUPPORTED=(
   [unknown]="Unknown"
 )
 
-# ------------ END DETECTIN SYSTEM --------------------
-
-# --- HELPER: LINKING ---
 link_file() {
   local src="$1"
   local dst="$2"
@@ -53,8 +48,6 @@ link_file() {
   ln -sfn "$src" "$dst"
 }
 
-# ------------- SETUP FUNCTIONS ------------------
-
 setup_arch() {
   echo "Arch setup starting..."
   # link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
@@ -64,7 +57,23 @@ setup_arch() {
 setup_termux() {
   echo "Termux setup starting..."
 
+  pkg update && pkg upgrade -y
+  pkg install -y git curl nvim fish tmux termux-api termux-exec
+
+  termux-wake-lock
+
+  if [ ! -d "$HOME/storage" ]; then
+    echo "Requesting storage permissions..."
+    termux-setup-storage
+  fi
+
   link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
+
+  if [ "$SHELL" != "$(which fish)" ]; then
+    chsh -s "$(which fish)"
+  fi
+
+  termux-wake-unlock
 }
 
 # ------------ MAIN EXECUTION ---------------------
