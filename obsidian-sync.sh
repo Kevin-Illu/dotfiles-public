@@ -6,20 +6,22 @@ notify() {
   fi
 }
 
-save_changes_if_exist() {
+save_changes() {
+  echo "Revisando cambios y guardandolos en remoto"
+
   git add .
   if ! git diff-index --quiet HEAD; then
     echo "Subiendo cambios locales..."
-    git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S') desde $CURRENT_HOST"
+    git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S') desde $(hostname)"
 
     if git push origin main; then
-      notify "Cambios guardados en la nube"
+      notify "Cambios guardados en la nube c:"
     else
-      notify "Error al subir los cambios"
+      notify "Error al subir los cambios x("
     fi
   else
     echo "Sin cambios locales para subir."
-    notify "Todo esta al dia"
+    notify "Todo esta al dia ;)"
   fi
 }
 
@@ -43,6 +45,8 @@ cd "$VAULT_DIR" || exit
 
 echo "Sincronizando con remoto..."
 
+save_changes
+
 if git pull --rebase origin main; then
   notify "Notas actualizadas desde el remoto"
 else
@@ -60,4 +64,4 @@ else
   obsidian %u
 fi
 
-save_changes_if_exist
+save_changes # only works for arch I thing :c
