@@ -6,12 +6,31 @@ notify() {
   fi
 }
 
+save_changes_if_exist() {
+  git add .
+  if ! git diff-index --quiet HEAD; then
+    echo "Subiendo cambios locales..."
+    git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S') desde $CURRENT_HOST"
+
+    if git push origin main; then
+      notify "Cambios guardados en la nube"
+    else
+      notify "Error al subir los cambios"
+    fi
+  else
+    echo "Sin cambios locales para subir."
+    notify "Todo esta al dia"
+  fi
+}
+
 if [ -d /data/data/com.termux ]; then
   VAULT_DIR="$HOME/storage/shared/Documents/notes/"
   IS_TERMUX=true
+  CURRENT_HOST="Pixel"
 else
   VAULT_DIR="$HOME/workspace/notes/Enginering/"
   IS_TERMUX=false
+  CURRENT_HOST="Arch"
 fi
 
 if [ ! -d "$VAULT_DIR" ]; then
@@ -21,11 +40,6 @@ fi
 
 cd "$VAULT_DIR" || exit
 
-git add .
-if ! git diff-index --quiet HEAD; then
-  echo "Guardando cambios locales antes de sincronizar..."
-  git commit -m "Auto-sync pre-pull $(date +'%Y-%m-%d %H:%M:%S') desde $(hostname)"
-fi
 
 echo "Sincronizando con remoto..."
 
@@ -46,17 +60,4 @@ else
   obsidian %u
 fi
 
-git add .
-if ! git diff-index --quiet HEAD; then
-  echo "Subiendo cambios locales..."
-  git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S') desde $(hostname)"
-
-  if git push origin main; then
-    notify "Cambios guardados en la nube"
-  else
-    notify "Error al subir los cambios"
-  fi
-else
-  echo "Sin cambios locales para subir."
-  notify "Todo esta al dia"
-fi
+save_changes_if_exist
