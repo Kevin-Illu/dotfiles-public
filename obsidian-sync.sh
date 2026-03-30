@@ -23,13 +23,13 @@ if [ "$IS_TERMUX" = true ]; then
   # Abre la app en Android (si el nombre del paquete es el estándar)
   am start --user 0 -n md.obsidian/md.obsidian.MainActivity > /dev/null 2>&1
 else
-  obsidian %u & # El '&' permite que el script siga aunque Obsidian esté abierto
+  obsidian %u
 fi
 
 git add .
 if ! git diff-index --quiet HEAD; then
   echo "Subiendo cambios locales..."
-  git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S')"
+  git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S') desde $(hostname)"
   git push origin main
 else
   echo "Sin cambios locales para subir."
