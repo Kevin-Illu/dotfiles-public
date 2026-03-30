@@ -6,25 +6,6 @@ notify() {
   fi
 }
 
-saveChanges() {
-  echo "Revisando cambios y guardandolos en remoto"
-
-  git add .
-  if ! git diff-index --quiet HEAD; then
-    echo "Subiendo cambios locales..."
-    git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S') desde $(hostname)"
-
-    if git push origin main; then
-      notify "Cambios guardados en la nube c:"
-    else
-      notify "Error al subir los cambios x("
-    fi
-  else
-    echo "Sin cambios locales para subir."
-    notify "Todo esta al dia ;)"
-  fi
-}
-
 if [ -d /data/data/com.termux ]; then
   VAULT_DIR="$HOME/storage/shared/Documents/notes/"
   IS_TERMUX=true
@@ -40,14 +21,18 @@ fi
 
 cd "$VAULT_DIR" || exit
 
+git add .
+if ! git diff-index --quiet HEAD; then
+  echo "Guardando cambios locales antes de sincronizar..."
+  git commit -m "Auto-sync pre-pull $(date +'%Y-%m-%d %H:%M:%S') desde $(hostname)"
+fi
+
 echo "Sincronizando con remoto..."
 
-saveChanges
-
 if git pull --rebase origin main; then
-  notify "Notas actualizadas desde el remoto :)"
+  notify "Notas actualizadas desde el remoto"
 else
-  notify "Error al descargar cambios x("
+  notify "Error al descargar cambios"
   exit 1
 fi
 
@@ -61,6 +46,17 @@ else
   obsidian %u
 fi
 
-# solo funciona para arch?
-saveChanges
+git add .
+if ! git diff-index --quiet HEAD; then
+  echo "Subiendo cambios locales..."
+  git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S') desde $(hostname)"
 
+  if git push origin main; then
+    notify "Cambios guardados en la nube"
+  else
+    notify "Error al subir los cambios"
+  fi
+else
+  echo "Sin cambios locales para subir."
+  notify "Todo esta al dia"
+fi
