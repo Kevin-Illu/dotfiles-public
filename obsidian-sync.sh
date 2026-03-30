@@ -1,6 +1,12 @@
 #!/bin/bash
 
-VAULT_DIR="$HOME/workspace/notes/Enginering/"
+if [ -d /data/data/com.termux ]; then
+  VAULT_DIR="$HOME/storage/shared/Documents/notes/"
+  IS_TERMUX=true
+else
+  VAULT_DIR="$HOME/workspace/notes/Enginering/"
+  IS_TERMUX=false
+fi
 
 if [ ! -d "$VAULT_DIR" ]; then
   echo "Error: El directorio $VAULT_DIR no existe."
@@ -9,23 +15,22 @@ fi
 
 cd "$VAULT_DIR" || exit
 
-echo "Bajando cambios remotos..."
-if ! git pull origin main; then
-  echo "Error: No se pudieron bajar los cambios. ¿Hay conflictos o falta de internet?"
-  exit 1
-fi
+echo "Sincronizando con remoto..."
+git pull --rebase origin main || { echo "Error en el pull. Revisa conflictos."; exit 1; }
 
 echo "Abriendo Obsidian..."
-obsidian %u
+if [ "$IS_TERMUX" = true ]; then
+  # Abre la app en Android (si el nombre del paquete es el estándar)
+  am start --user 0 -n md.obsidian/md.obsidian.MainActivity > /dev/null 2>&1
+else
+  obsidian %u & # El '&' permite que el script siga aunque Obsidian esté abierto
+fi
 
-echo "Subiendo cambios locales..."
 git add .
-
-# Solo hacer commit si hay cambios detectados
 if ! git diff-index --quiet HEAD; then
   echo "Subiendo cambios locales..."
   git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S')"
   git push origin main
 else
-  echo "No hay cambios locales para subir."
+  echo "Sin cambios locales para subir."
 fi
