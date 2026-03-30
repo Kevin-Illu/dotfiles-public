@@ -34,6 +34,8 @@ echo "Abriendo Obsidian..."
 if [ "$IS_TERMUX" = true ]; then
   # Abre la app en Android (si el nombre del paquete es el estándar)
   am start --user 0 -n md.obsidian/md.obsidian.MainActivity > /dev/null 2>&1
+
+  sleep 2 # chapuz para que se procese la apertura 
 else
   obsidian %u
 fi
