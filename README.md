@@ -15,6 +15,7 @@ configuration looks and the colorscheme he has.
 - [ ] Tmux
 - [ ] Fish
 - [ ] Some android dotfiles config
+- [ ] Obsidian sync
 
 ## TODO
 
