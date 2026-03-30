@@ -12,7 +12,7 @@ save_changes() {
   git add .
   if ! git diff-index --quiet HEAD; then
     echo "Subiendo cambios locales..."
-    git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S') desde $(hostname)"
+    git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S') desde $CURRENT_HOST"
 
     if git push origin main; then
       notify "Cambios guardados en la nube c:"
