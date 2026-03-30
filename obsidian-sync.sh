@@ -1,5 +1,11 @@
 #!/bin/bash
 
+notify() {
+  if [ "$IS_TERMUX" = false ]; then
+    notify-send -i obsidian "Obsidian Sync" "$1"
+  fi
+}
+
 if [ -d /data/data/com.termux ]; then
   VAULT_DIR="$HOME/storage/shared/Documents/notes/"
   IS_TERMUX=true
@@ -16,7 +22,13 @@ fi
 cd "$VAULT_DIR" || exit
 
 echo "Sincronizando con remoto..."
-git pull --rebase origin main || { echo "Error en el pull. Revisa conflictos."; exit 1; }
+
+if git pull --rebase origin main; then
+  notify "Notas actualizadas desde el remoto :)"
+else
+  notify "Error al descargar cambios x("
+  exit 1
+fi
 
 echo "Abriendo Obsidian..."
 if [ "$IS_TERMUX" = true ]; then
@@ -30,7 +42,13 @@ git add .
 if ! git diff-index --quiet HEAD; then
   echo "Subiendo cambios locales..."
   git commit -m "Auto-sync $(date +'%Y-%m-%d %H:%M:%S') desde $(hostname)"
-  git push origin main
+
+  if git push origin main; then
+    notify "Cambios guardados en la nube c:"
+  else
+    notify "Error al subir los cambios x("
+  fi
 else
   echo "Sin cambios locales para subir."
+  notify "Todo esta al dia ;)"
 fi
