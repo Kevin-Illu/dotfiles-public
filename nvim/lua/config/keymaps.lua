@@ -43,20 +43,38 @@ keymap.set("n", "<C-m>", "<C-i>", opts)
 keymap.set("n", "te", ":tabedit<CR>", opts)
 keymap.set("n", "<tab>", ":tabnext<CR>", opts)
 keymap.set("n", "<s-tab>", ":tabprev<CR>", opts)
+
 -- Split window
 keymap.set("n", "ss", ":split<CR>", opts)
 keymap.set("n", "sv", ":vsplit<CR>", opts)
+-- En tu archivo de keymaps.lua
+-- Rotar ventanas (The Unix Way: reordenar el layout sin cerrar nada)
+keymap.set("n", "<Leader>rh", "<C-w>H") -- Mueve ventana actual a la izquierda (ocupa todo el alto)
+keymap.set("n", "<Leader>rk", "<C-w>K") -- Mueve ventana actual arriba (ocupa todo el ancho)
+keymap.set("n", "<Leader>rj", "<C-w>J") -- Mueve ventana actual abajo (ocupa todo el ancho)
+keymap.set("n", "<Leader>rl", "<C-w>L") -- Mueve ventana actual a la derecha (ocupa todo el alto)
+
+-- Maximizar split actual (Toggle de zoom para enfocarte en el código o la terminal)
+keymap.set("n", "<Leader><", ":vertical resize | resize<CR>", opts)
+keymap.set("n", "<Leader>>", "<C-w>=", opts) -- Restaurar todos los tamaños
+
 -- Move window
 keymap.set("n", "sh", "<C-w>h", opts)
 keymap.set("n", "sk", "<C-w>k", opts)
 keymap.set("n", "sj", "<C-w>j", opts)
 keymap.set("n", "sl", "<C-w>l", opts)
 
--- Resize window
-keymap.set("n", "<C-w><left>", "<C-w><")
-keymap.set("n", "<C-w><right>", "<C-w>>")
-keymap.set("n", "<C-w><up>", "<C-w>+")
-keymap.set("n", "<C-w><down>", "<C-w>-")
+-- Resize window (Usando Alt + Flechas)
+keymap.set("n", "<A-left>", ":vertical resize -2<CR>", opts)
+keymap.set("n", "<A-right>", ":vertical resize +2<CR>", opts)
+keymap.set("n", "<A-up>", ":resize +2<CR>", opts)
+keymap.set("n", "<A-down>", ":resize -2<CR>", opts)
+
+-- Opcional: Usar Alt + hjkl para no mover las manos del home row
+keymap.set("n", "<A-h>", ":vertical resize -2<CR>", opts)
+keymap.set("n", "<A-j>", ":resize -2<CR>", opts)
+keymap.set("n", "<A-k>", ":resize +2<CR>", opts)
+keymap.set("n", "<A-l>", ":vertical resize +2<CR>", opts)
 
 --Diagnostics Navigation (Standard & Fast)
 -- ]d -> Siguiente error/warning
