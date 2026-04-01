@@ -146,7 +146,7 @@ return {
 					explorer = {
 						layout = {
 							preset = "telescope",
-							preview = true,
+							preview = nil,
 						},
 						win = {
 							list = {
