@@ -15,8 +15,9 @@ keymap.set("n", "<Leader>D", '"_D')
 keymap.set("v", "<Leader>d", '"_d')
 keymap.set("v", "<Leader>D", '"_D')
 
--- quit
-keymap.set("n", "qq", ":wq<CR>")
+-- quit neovim saving the current file and without
+keymap.set("n", "wq", ":wq<CR>")
+keymap.set("n", "qq", ":q!<CR>")
 
 -- Increment/decrement
 keymap.set("n", "+", "<C-a>")
@@ -46,10 +47,10 @@ keymap.set("n", "<s-tab>", ":tabprev<CR>", opts)
 keymap.set("n", "ss", ":split<CR>", opts)
 keymap.set("n", "sv", ":vsplit<CR>", opts)
 -- Move window
-keymap.set("n", "sh", "<C-w>h")
-keymap.set("n", "sk", "<C-w>k")
-keymap.set("n", "sj", "<C-w>j")
-keymap.set("n", "sl", "<C-w>l")
+keymap.set("n", "sh", "<C-w>h", opts)
+keymap.set("n", "sk", "<C-w>k", opts)
+keymap.set("n", "sj", "<C-w>j", opts)
+keymap.set("n", "sl", "<C-w>l", opts)
 
 -- Resize window
 keymap.set("n", "<C-w><left>", "<C-w><")
@@ -57,21 +58,21 @@ keymap.set("n", "<C-w><right>", "<C-w>>")
 keymap.set("n", "<C-w><up>", "<C-w>+")
 keymap.set("n", "<C-w><down>", "<C-w>-")
 
--- Diagnostics
-keymap.set("n", "<C-j>", function()
-	vim.diagnostic.goto_next()
+--Diagnostics Navigation (Standard & Fast)
+-- ]d -> Siguiente error/warning
+-- [d -> Anterior error/warning
+keymap.set("n", "]d", function()
+	vim.diagnostic.jump({ count = 1, float = true })
 end, opts)
 
--- this actions are not in my config yet
---
--- keymap.set("n", "<leader>r", function()
--- 	require("craftzdog.hsl").replaceHexWithHSL()
--- end)
---
--- keymap.set("n", "<leader>i", function()
--- 	require("craftzdog.lsp").toggleInlayHints()
--- end)
---
--- vim.api.nvim_create_user_command("ToggleAutoformat", function()
--- 	require("craftzdog.lsp").toggleAutoformat()
--- end, {})
+keymap.set("n", "[d", function()
+	vim.diagnostic.jump({ count = -1, float = true })
+end, opts)
+
+keymap.set("n", "<leader>e", function()
+	vim.diagnostic.open_float()
+end, opts)
+
+keymap.set("n", "<leader>q", function()
+	vim.diagnostic.setloclist()
+end, opts)

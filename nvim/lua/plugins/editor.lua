@@ -65,7 +65,9 @@ return {
 			},
 			{
 				";r",
-				function() end,
+				function()
+					require("telescope.builtin").live_grep()
+				end,
 				desc = "Search for a string in your current working directory and get results live as you type, respects .gitignore",
 			},
 			{
@@ -86,7 +88,9 @@ return {
 			},
 			{
 				";;",
-				function() end,
+				function()
+					require("telescope.builtin").resume()
+				end,
 				desc = "Resume the previous telescope picker",
 			},
 			{
@@ -114,24 +118,26 @@ return {
 				desc = "Lists LSP incoming calls for word under the cursor",
 			},
 			{
-				"sf",
+				";b",
 				function()
 					local telescope = require("telescope")
+					local themes = require("telescope.themes")
 
-					local function telescope_buffer_dir()
-						return vim.fn.expand("%:p:h")
-					end
-
-					telescope.extensions.file_browser.file_browser({
+					telescope.extensions.file_browser.file_browser(themes.get_dropdown({
 						path = "%:p:h",
-						cwd = telescope_buffer_dir(),
+						cwd = vim.fn.expand("%:p:h"),
 						respect_gitignore = false,
 						hidden = true,
 						grouped = true,
 						previewer = false,
 						initial_mode = "normal",
-						layout_config = { height = 40 },
-					})
+						layout_config = {
+							height = 0.6,
+							width = 0.8,
+						},
+						border = true,
+						borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+					}))
 				end,
 				desc = "Open File Browser with the path of the current buffer",
 			},
@@ -158,7 +164,6 @@ return {
 			}
 			opts.extensions = {
 				file_browser = {
-					theme = "dropdown",
 					-- disables netrw and use telescope-file-browser in its place
 					hijack_netrw = true,
 					mappings = {
