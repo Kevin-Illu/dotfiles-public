@@ -12,6 +12,8 @@ return {
 				"tailwindcss-language-server",
 				"typescript-language-server",
 				"css-lsp",
+				"eslint_d",
+				"flake8",
 			})
 		end,
 	}, -- lsp servers
@@ -121,10 +123,52 @@ return {
 						},
 					},
 				},
+				pyright = {
+					settings = {
+						python = {
+							analysis = {
+								typeCheckingMode = "basic",
+								diagnosticMode = "workspace",
+								useLibraryCodeForTypes = true,
+								autoImportCompletions = true,
+								ignore = { "*" },
+								reportMissingTypeStubs = false,
+								reportMissingImports = false,
+								reportUnusedImport = "warning",
+								reportGeneralTypeIssues = false,
+								reportOptionalMemberAccess = false,
+								reportOptionalSubscript = false,
+								reportPrivateImportUsage = false,
+								reportUnusedClass = "warning",
+								reportUnusedFunction = "warning",
+								reportUnusedVariable = "warning",
+							},
+						},
+					},
+					root_dir = require("lspconfig").util.root_pattern(
+						"pyproject.toml",
+						"setup.py",
+						"setup.cfg",
+						".git"
+					),
+				},
+				pylsp = {
+					settings = {
+						pylsp = {
+							plugins = {
+								pycodestyle = { enabled = false },
+								mccabe = { enabled = false },
+								flake8 = { enabled = false },
+								pylint = { enabled = false },
+							},
+						},
+					},
+				},
 			},
 			setup = {},
 		},
 	},
+
 	{
 		"neovim/nvim-lspconfig",
 		opts = function(_, opts)

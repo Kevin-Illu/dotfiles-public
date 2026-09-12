@@ -76,6 +76,8 @@ keymap.set("n", "<A-j>", ":resize -2<CR>", opts)
 keymap.set("n", "<A-k>", ":resize +2<CR>", opts)
 keymap.set("n", "<A-l>", ":vertical resize +2<CR>", opts)
 
+keymap.set("n", "<leader>rn", ":IncRename ", opts)
+
 --Diagnostics Navigation (Standard & Fast)
 -- ]d -> Siguiente error/warning
 -- [d -> Anterior error/warning

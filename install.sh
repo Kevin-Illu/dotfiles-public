@@ -53,9 +53,10 @@ link_file() {
 
 setup_arch() {
   echo "Arch setup starting..."
-  # link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
+  link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
   # link_file "$DOTFILES_DIR/fish" "$HOME/.config/fish"
 }
+
 
 setup_termux() {
   echo "Termux setup starting..."

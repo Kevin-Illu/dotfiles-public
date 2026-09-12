@@ -1,0 +1,1 @@
+/home/bmo/.local/state/omarchy/current/theme/neovim.lua

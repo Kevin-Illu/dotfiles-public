@@ -1,3 +1,11 @@
+-- Options are automatically loaded before lazy.nvim startup.
+pcall(function()
+	require("config.remote_clipboard").setup()
+end)
+
+vim.opt.relativenumber = false
+vim.g.autoformat = false
+
 vim.g.mapleader = " "
 
 vim.opt.encoding = "utf-8"
